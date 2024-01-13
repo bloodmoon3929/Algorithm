@@ -349,16 +349,16 @@ int main()
 |45|/| 1|/| 3|/| 1|/| 2|/| 3|/|45|/| 5|/| 1|/| 2|/|44|/| 5|/| 7|
 |--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|
 ## 그 후 분해한 역순으로 부분 집합을 병합하는 데, 정렬된 상태를 유지해야 합니다. (순서가 바꾼 부분은 빨간색)
-|45|/| 1| 3|/| 1|/| 2| 3|/|45|/|<span style="color:red"> 1|<span style="color:red"> 5|/| 2|44|/| 5| 7|
+|45|/| 1| 3|/| 1|/| 2| 3|/|45|/|<span style="color:red"> 1</span>|<span style="color:red"> 5</span>|/| 2|44|/| 5| 7|
 |--|-|--|--|-|--|-|--|--|-|--|-|--|--|-|--|--|-|--|--|
 ***
-| <span style="color:red">1| <span style="color:red">3|<span style="color:red">45|/| 1| 2| 3|/|<span style="color:red"> 1| <span style="color:red">5|<span style="color:red">45|/|<span style="color:red"> 2|<span style="color:red"> 5|<span style="color:red"> 7|<span style="color:red">44|
+| <span style="color:red">1</span>| <span style="color:red">3</span>|<span style="color:red">45</span>|/| 1| 2| 3|/|<span style="color:red"> 1</span>| <span style="color:red">5</span>|<span style="color:red">45</span>|/|<span style="color:red"> 2</span>|<span style="color:red"> 5</span>|<span style="color:red"> 7</span>|<span style="color:red">44</span>|
 |--|--|--|-|--|--|--|-|--|--|--|-|--|--|--|--|
 ***
-| <span style="color:red">1| <span style="color:red">1| <span style="color:red">2| <span style="color:red">3| <span style="color:red">4|<span style="color:red">45|/| <span style="color:red">1| <span style="color:red">2| <span style="color:red">5| <span style="color:red">5| <span style="color:red">7|<span style="color:red">44|<span style="color:red">45|
+| <span style="color:red">1</span>| <span style="color:red">1</span>| <span style="color:red">2</span>| <span style="color:red">3</span>| <span style="color:red">4</span>|<span style="color:red">45</span>|/| <span style="color:red">1</span>| <span style="color:red">2</span>| <span style="color:red">5</span>| <span style="color:red">5</span>| <span style="color:red">7</span>|<span style="color:red">44</span>|<span style="color:red">45</span>|
 |--|--|--|--|--|--|-|--|--|--|--|--|--|--|
 ***
-| <span style="color:red">1|<span style="color:red"> 1|<span style="color:red"> 1|<span style="color:red"> 2|<span style="color:red"> 2|<span style="color:red"> 3|<span style="color:red"> 3|<span style="color:red"> 5|<span style="color:red"> 5|<span style="color:red"> 7|<span style="color:red">44|<span style="color:red">45|<span style="color:red">45|
+| <span style="color:red">1</span>|<span style="color:red"> 1</span>|<span style="color:red"> 1</span>|<span style="color:red"> 2</span>|<span style="color:red"> 2</span>|<span style="color:red"> 3</span>|<span style="color:red"> 3</span>|<span style="color:red"> 5</span>|<span style="color:red"> 5</span>|<span style="color:red"> 7</span>|<span style="color:red">44</span>|<span style="color:red">45</span>|<span style="color:red">45</span>|
 |--|--|--|--|--|--|--|--|--|--|--|--|--|
 ***
 이 배열을 브루트 포스로 풀게 된다면, 시간 복잡도는 $n^2$이지만, 병합 정렬로 풀게 된다면 시간 복잡도는 $nlogn$이 될 것이다.
@@ -460,22 +460,22 @@ int main()
 |45| 1| 3| 1| 2| 3|45| 5| 1| 2|44| 5| 7|
 |--|--|--|--|--|--|--|--|--|--|--|--|--|
 ## 퀵 정렬은 임의의 원소값을 기준으로 나누지만 해당 코드에서는 첫 번째 원소를 기준으로 배열을 분리 했기에 그를 따르도록 하겠습니다.(피벗은 파랑색)
-|<span style="color:blue"> 1| 3| 1| 2| 3|45| 5| 1| 2|44| 5| 7|/|<span style="color:blue">45|
+|<span style="color:blue"> 1</span>| 3| 1| 2| 3|45| 5| 1| 2|44| 5| 7|/|<span style="color:blue">45</span>|
 |--|--|--|--|--|--|--|--|--|--|--|--|-|--|
 ***
-|<span style="color:blue"> 1|/| 1| 1|/| <span style="color:blue">3| 2| 3|45| 5| 2|44| 5| 7|/|45|
+|<span style="color:blue"> 1</span>|/| 1| 1|/| <span style="color:blue">3</span>| 2| 3|45| 5| 2|44| 5| 7|/|45|
 |--|-|--|-|--|--|--|--|--|--|--|--|--|--|-|--|
 ***
-| 1|/|<span style="color:blue"> 1|/| 1|/| 2| 3| 2|<span style="color:blue"> 3|/|<span style="color:blue">45| 5|44| 5| 7|/|45|
+| 1|/|<span style="color:blue"> 1</span>|/| 1|/| 2| 3| 2|<span style="color:blue"> 3</span>|/|<span style="color:blue">45</span>| 5|44| 5| 7|/|45|
 |--|-|--|-|--|-|--|--|--|--|--|-|--|--|--|--|-|--|
 ***
-| 1|/| 1|/| 1|/| 2|<span style="color:blue"> 2|/|<span style="color:blue"> 3| 3|/| <span style="color:blue">5|44| 5| 7|/|45|/|45|
+| 1|/| 1|/| 1|/| 2|<span style="color:blue"> 2</span>|/|<span style="color:blue"> 3</span>| 3|/| <span style="color:blue">5</span>|44| 5| 7|/|45|/|45|
 |--|-|--|-|--|-|--|--|-|--|--|-|--|--|--|--|-|--|-|--|
 ***
-| 1|/| 1|/| 1|/| 2|/| <span style="color:blue">2|/| 3|/| <span style="color:blue">3|/| 5| <span style="color:blue">5|/|<span style="color:blue">45| 7|/|45|/|45|
+| 1|/| 1|/| 1|/| 2|/| <span style="color:blue">2</span>|/| 3|/| <span style="color:blue">3</span>|/| 5| <span style="color:blue">5</span>|/|<span style="color:blue">45</span>| 7|/|45|/|45|
 |--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|--|-|--|--|-|--|-|--|
 ***
-| 1|/| 1|/| 1|/| 2|/| 2|/| 3|/| 3|/| 5|/| <span style="color:blue">5|/| 7|/|<span style="color:blue">45|/|45|/|45|
+| 1|/| 1|/| 1|/| 2|/| 2|/| 3|/| 3|/| 5|/| <span style="color:blue">5</span>|/| 7|/|<span style="color:blue">45</span>|/|45|/|45|
 |--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|
 ***
 ## 3. 선형 시간 선택
