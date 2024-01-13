@@ -186,15 +186,72 @@ std::sort(numbers.begin(), numbers.end(), [](int a, int b) {return a > b;});
 이 헤더파일은 시간을 다루기 위해 사용하는 헤더파일입니다. 포함되어 있는 클래스는 다음과 같습니다.
 ```cpp
 std::chrono::duration
-
+std::chrono::time_point
+std::chrono::system_clock
+std::chrono::high_resolution_clock
+std::chrono::steady_clock
 ```
+1. std::chrono::duration는 주로 std::chrono::duration<Rep, Period>형식으로 사용되며<br>
+Rep은 자료형, Period는 시간의 간격의 단위를 나타낸다.<br>
 
-
+2. std::chrono::time_point는 특정 시간을 나타냅니다. 주로 std::chrono::time_point<Clock, Duration>형태로 사용하며<br>
+Clock은 측정하는 시계의 자료형을, Duration는 시각을 나타내는 시계의 자료형을 나타냅니다. 
+3. std::chrono::system_clock는 현제 시간을 내타내며, 다음처럼 사용합니다. std::chrono::time_point\<std::chrono::system_clock>
+4. std::chrono::high_resolution_clock는 고해상도의 시간을 측정하는데 사용되며, 다음과 같이 사용합니다.
+std::chrono::time_point\<std::chrono::high_resolution_clock>
+5. std::chrono::steady_clock는 위의 클래스가 고해상도라면, 이 친구는 안정적인 속성을 지닌 시계이며 다음과 같이 사용합니다.
+std::chrono::time_point\<std::chrono::steady_clock>
 
 `#include <random>`<br>
 <br>
+이 헤더파일은 난수를 생성하기 위해 사용되는 헤더파일이며, 포함된 클래스는 다음과 같습니다.
+```cpp
+std::random_device
+std::default_random_engine
+std::uniform_int_distribution
+std::uniform_real_distribution
+std::normal_distribution
+std::bernoulli_distribution
+std::mt19937 rand(rd())
+```
+
+1. std::random_device는 하드웨어 기반의 난수 생성 장치에 접근할 수 있는 인터페이스를 제공하는 클래스입니다.<br>
+반환형은 std::random_device::result_type이고, result_type은 일반적으로 부호가 없는 정수 타입입니다.
+2. std::default_random_engine는 난수 생성을 담당하는 클래스입니다<br>
+반환형은 일반적으로 부호가 없는 정수 입니다.
+3. std::uniform_int_distribution는 균일 분포에서 정수를 생성하는데 사용됩니다.<br>
+반환형은 템플릿에 따라 다르지만 일반적으로 정수입니다.
+4. std::uniform_real_distribution는 균일 분포에서 실수를 생성하는데 사용됩니다.<br>
+반환형은 템플릿에 따라 다르지만 일반적으로 실수입니다.
+5. std::normal_distribution는 정규 분포에서 난수를 생성하는데 사용됩니다.<br>
+반환형은 템플릿에 따라 다르지만 일반적으로 생성된 난수입니다.
+6. std::bernoulli_distribution는 베르누이 분포에서 난수를 생성하는데 사용됩니다.<br>
+반환형은 템플릿에 따라 다르지만 일반적으로 bool입니다.
+7. std::mt19937 rand(rd())은  Mersenne Twister 알고리즘을 구현한 난수 생성 엔진 중 하나입니다. C에서의 srand과 유사하다고 생각하면 되겠습니다.
 
 `#include <algorithm>`<br>
+이 헤더파일은 4장에서 다시 볼 것이기에 간단히만 알아보도록 하겠습니다.
+|정렬 알고리즘|(Sorting Algorithm)|
+|------------|-------------------|
+|std::sort|범위의 요소들을 정렬합니다.|
+|std::partial_sort|범위를 정렬하지만 정렬된 일부만 유지합니다.|
+|std::nth_element|특정 순서의 요소를 찾습니다.|
+|이진 검색 알고리즘|(Binary Search Algorithms)|
+|std::binary_search|이진 검색을 수행하여 요소의 존재 여부를 확인합니다.|
+|std::lower_bound|이진 검색을 사용하여 특정 값 이상의 첫 번째 위치를 찾습니다.|
+|std::upper_bound|이진 검색을 사용하여 특정 값보다 큰 첫 번째 위치를 찾습니다.|
+|비교 알고리즘|(Comparison Algorithms)|
+|std::equal|두 범위가 동일한지 확인합니다.|
+|std::lexicographical_compare| 두 범위를 사전식으로 비교합니다.|
+|순열과 조합 |(Permutations and Combinations)|
+|std::next_permutation|다음 순열을 생성합니다.|
+|std::prev_permutation|이전 순열을 생성합니다.|
+|std::rotate|요소들을 회전시킵니다.|
+|그 외의 알고리즘들||
+|std::max, std::min|두 값 중 큰 값 또는 작은 값을 반환합니다.|
+|std::max_element, std::min_element|범위에서 최댓값 또는 최솟값의 위치를 찾습니다.|
+|std::copy|요소를 다른 범위로 복사합니다.|
+|std::reverse|범위의 요소들을 뒤집습니다.|
 
 ## 2. 분할 정복 이해
 분할 정복 접근방법은 크게 3단계로 나눌수 있습니다.<br>
@@ -478,9 +535,227 @@ int main()
 | 1|/| 1|/| 1|/| 2|/| 2|/| 3|/| 3|/| 5|/| <span style="color:blue">5</span>|/| 7|/|<span style="color:blue">45</span>|/|45|/|45|
 |--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|-|--|
 ***
+<br><br>
+위에서 보듯 운이 좋지않다면, 단 하나의 값만을 정렬하는 좋지 못한 모습도 보인다.
+<br>이 경우(최악의 경우)에는 시간복잡도는 $n^2$이 될 것입니다.
+
+|알고리즘|최선의 경우|평균|최악의 경우|
+|-------|----------|----|----------|
+|병합 정렬|$O(nlogn)$|$O(nlogn)$|$O(nlogn)$|
+|퀵 정렬|$O(nlogn)$|$O(nlogn)$|$O(n^2)$|
 ## 3. 선형 시간 선택
+선형 시간 선택은 전체 정렬에서 n번째로 작은 원소를 찾을 때 사용할 수 있습니다.
+<br>전체 집합을 정렬하고 n번째 원소를 찾고자 한다면 $O(nlogn)$시간이 소모 되겠지만 선형 시간 선택 알고리즘을 사용하면 $O(n)$의 시간으로 원소를 구할수 있습니다.
+<br>
+책을 기준으로
+1. 입력 버퍼를 5개의 원소를 가지는 부분 집합으로 나눕니다.
+2. 각각의 부분 집합들을 정렬합니다.
+3. 각각의 집합들에서 중앙값을 구하고, 중앙값들의 집합에서 또 중앙값을 찾습니다.
+4. 찾은 중앙값을 기준으로 두개의 벡터로 나눕니다.
 
+|<span style="color:green">1</span>|<span style="color:green">1</span>|<span style="color:green">3</span>|<span style="color:green">4</span>|<span style="color:green">4</span>|
+|-|-|-|-|-|
+|<span style="color:green">2</span>|<span style="color:green">2</span>|<span style="color:green">4</span>|<span style="color:green">5</span>|<span style="color:green">6</span>|
+|<span style="color:green">3</span>|<span style="color:green">4</span>|<span style="color:blue">7</span>|8|8|
+|<span style="color:green">1</span>|<span style="color:green">1</span>|9|23|30|
+| |<span style="color:green">3</span>|10|3|
+5. * 나누어진 벡터 중 피벗보다 원소값이 작은 원소의 집합의 사이즈+1의 값이 n과 같다면 찾고자한 값을 찾은 것이고,<br>
+   * 집합의 사이즈+1의 값이 n보다 작다면 피벗보다 큰 원소값으로 구성된 집합을 가지고 1번 과정을 반복합니다.
+   * 집합의 사이즈+1의 값이 n보다 크다면 피벗보다 작은 원소값으로 구성된 집합을 가지고 1번 과정을 반복합니다.
+  
+다음은 선형 시간 선택의 코드입니다.
+```cpp
+#include <iostream>
+#include <vector>
 
+template<typename T>
+auto partition(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end)
+{
+    auto pivot_val=*begin;
+    auto left_iter=begin+1;
+    auto right_iter=end;
+    while (true)
+    {
+        while (*left_iter<=pivot_val&&std::distance(left_iter, right_iter)>0)
+           left_iter++;
+        while (*right_iter>pivot_val&&std::distance(left_iter, right_iter)>0)
+           right_iter--;
+        if(right_iter==left_iter)
+            break;
+        else
+            std::iter_swap(left_iter, right_iter);
+        
+    }
+    if(pivot_val>*right_iter)
+        std::iter_swap(begin, right_iter);
+
+    return right_iter;
+}
+
+template<typename T>
+void quick_sort(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end)
+{
+    if(std::distance(begin, end)>=1)
+    {
+        auto partition_iter = partition<T>(begin, end);
+        quick_sort<T>(begin, partition_iter-1);
+        quick_sort<T>(partition_iter,end);
+    }
+}
+
+template<typename T>
+auto find_median(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last)
+{
+    quick_sort<T>(begin, last);
+    return begin+(std::distance(begin, last)/2);
+}
+
+template<typename T>
+auto partition_using_given_pivot(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator pivot)
+{
+    auto left_iter=begin;
+    auto right_iter=end;
+    while (true)
+    {
+        while(*left_iter<*pivot&&left_iter!=right_iter)
+            left_iter++;
+        while(*right_iter>=*pivot&&left_iter!=right_iter)
+            right_iter--;
+        if(left_iter==right_iter)
+            break;
+        else
+            std::iter_swap(left_iter, right_iter);
+    }
+    if(*pivot>*right_iter)
+        std::iter_swap(pivot, right_iter);
+    return right_iter;
+}
+
+template<typename T>
+typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last, size_t i)
+{
+   auto size = std::distance(begin, last);
+   if(size>0&&i<size)
+   {
+       auto num_Vi = (size+4)/5;
+       size_t j =0;
+
+       std::vector<T> M;
+       for(;j<size/5;j++)
+       {
+           auto b=begin+(j*5);
+           auto l=begin+(j*5)+5;
+           M.push_back(*find_median<T>(b, l));
+       }
+       if(j*5<size)
+       {
+           auto b=begin+(j*5);
+           auto l=begin+(j*5)+(size%5);
+           M.push_back(*find_median<T>(b, l));
+       }
+       auto median_of_medians = (M.size()==1)?M.begin():linear_time_select<T>(M.begin(), M.end()-1, M.size()/2);
+       auto partition_iter = partition_using_given_pivot<T>(begin, last, median_of_medians);
+       auto k = std::distance(begin, partition_iter)+1;
+       if(i==k)
+           return partition_iter;
+       else if(i<k)
+           return linear_time_select<T>(begin, partition_iter-1, i);
+       else
+           return linear_time_select<T>(partition_iter+1, last, i-k);
+    }
+    else
+    {
+       return begin;
+    }
+}
+
+template<typename T>
+std::vector<T> merge(std::vector<T>& arr1, std::vector<T>& arr2)
+{
+    std::vector<T> merged;
+    auto iter1 = arr1.begin();
+    auto iter2 = arr2.begin();
+    while(iter1!=arr1.end()&&iter2!=arr2.end())
+    {
+        if(*iter1<*iter2)
+        {
+            merged.emplace_back(*iter1);
+            iter1++;
+        }
+        else
+        {
+            merged.emplace_back(*iter2);
+            iter2++;
+        }
+    }
+    if(iter1!=arr1.end())
+    {
+        for(;iter1!=arr1.end();iter1++)
+            merged.emplace_back(*iter1);
+    }
+    else
+    {
+        for(;iter2!=arr2.end();iter2++)
+            merged.emplace_back(*iter2);
+    }
+    return merged;
+}
+
+template<typename T>
+std::vector<T> merge_sort(std::vector<T> arr)
+{
+    if(arr.size()>1)
+    {
+        auto mid=size_t(arr.size()/2);
+        auto left_half = merge_sort(std::vector<T>(arr.begin(), arr.begin()+mid));
+        auto right_half = merge_sort(std::vector<T>(arr.begin()+mid, arr.end()));
+
+        return merge(left_half, right_half);
+    }
+    return arr;
+}
+
+template<typename T>
+void print_vector(std::vector<T> arr)
+{
+	for (auto i : arr)
+		std::cout << i << " ";
+	std::cout << std::endl;
+}
+
+void run_linear_select_test()
+{
+    std::vector<int> S1{45, 1, 3, 1,2,3,45,5,1,2,44,5,7};
+    std::cout<<"입력 벡터: "<<std::endl;
+    print_vector<int>(S1);
+    std::cout<<"정렬된 벡터: "<<std::endl;
+    print_vector<int>(merge_sort<int>(S1));
+    std::cout<<"3번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 3)<<std::endl;
+    std::cout<<"5번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 5)<<std::endl;
+    std::cout<<"11번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 11)<<std::endl;
+}
+
+int main()
+{
+    run_linear_select_test();
+    return 0;
+}
+```
+각각의 함수에 대한 간단한 설명을 하겠습니다.<br>
+`1. auto find_median(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last)`<br>
+해당 함수는 배열을 정렬한 후 배열의 중간 원소의 주소값을 반환하는 함수입니다.
+<br>
+
+`2. auto partition_using_given_pivot(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator pivot)`<br>
+해당 함수는 피벗을 기준으로 작은 값은 왼쪽으로, 큰 값은 오른쪽으로 옮기는, 이미 퀵 정렬에서 비슷한 개념을 한번 사용했었음, 함수입니다. 다만 배열 하나를 분할 하는 것이 아닌 전체 배열에서 중앙값을 찾은 후 그것을 피벗 삼아 분리하기에 전달인자가 한개 더 있습니다.
+<br>
+
+`3. typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last, size_t i)`<br>
+해당 함수는 배열을 5개를 기준으로 나눈후 그 중앙값을 벡터 M에 저장한후 중간값의 중간 값을 찾고, 이를 피벗 삼아 분할하여, 피벗이 n번째 원소가 아니라면
+1. 피벗이 n보다 크다면 피벗보다 작은 원소들의 집합을 재귀 시키고,
+2. 피벗이 n보다 작다면 피벗보다 큰 원소들의 집합을 재귀시킵니다.
+3. 피벗과 n가 같을 때까지 과정을 반복합니다.
+<br> <br>
 
 # 4.분할 정복 기법과 C++ 표준 라이브러리 함수
 지금까지 만든 함수들은 대부분 Algorithm 헤더파일에 포함되어 있습니다. 다음은 유용한 함수들 입니다.
@@ -503,4 +778,36 @@ int main()
 |std::transform()        |컨테이너와 함수가 주어지면, 컨테이너의 모든 원소에 대해 해당 함수를 적용한다.|
 |std::reduce()(C++17문법)|지정된 범위의 원소에 대해 리듀스 연산을 수행하고 결과를 반환한다.|
 # 5.맵리듀스
+1. 맵 : 컨테이너를 입력으로 받아, 컨테이너의 모든 원소들에 함수($f(x)$)를 적용하는 연산입니다.
+
+|1|2|3|4|5|
+|-|-|-|-|-|
+
+$f(x)=2x$일 때,
+
+|2|4|6|8|10|
+|-|-|-|-|-|
+
+1. 리듀스 : 컨테이너의 모든 원소를 함수($f(acc,x)$)를 적용하여 하나의 값으로 축약하는 연산입니다.
+
+|1|2|3|4|5|
+|-|-|-|-|-|
+
+$f(a,x)=a+x$일 때,
+
+$((((1+2)+3)+4)+5)=15$
+
+C++에서는 std::transform()과 std::accumulate() 함수를 맵과 리듀스로 제공합니다.
+
+다음은 맵과 리듀스 구현의 코드입니다.
+```cpp
+
+```
+
+다음은 맵리듀스로 소수를 확인하는 코드입니다.
+```cpp
+
+```
+
+
 <span style="color:blue">
