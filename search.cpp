@@ -3,8 +3,9 @@
 #include <chrono>
 #include <random>
 #include <algorithm>
+using namespace std;
 
-bool linear_search(int N, std::vector<int>& S)
+bool linear_search(int N, vector<int>& S)
 {
     for(auto i : S)
     {
@@ -14,45 +15,23 @@ bool linear_search(int N, std::vector<int>& S)
     return false;
 }
 
-// bool binary_search(int N, std::vector<int>& S)
-// {
-//     auto first = S.begin();
-//     auto last = S.end();
-
-//     while(true)
-//     {
-//         auto range_lenth = std::distance(first, last);
-//         auto middle_index = (int)std::floor(range_lenth/2);
-//         auto middle = *(first + middle_index);
-
-//         if(middle==N)
-//             return true;
-//         else if(middle>N)
-//             std::advance(last, -middle_index);
-//         if(middle<N)
-//             std::advance(first, middle_index);
-        
-//         if(range_lenth==1)
-//             return false;
-//     }
-// }
-bool binary_search(int N, std::vector<int>& S)
+bool binary_search(int N, vector<int>& S)
 {
     auto first = S.begin();
     auto last = S.end();
 
     while(true)
     {
-        auto range_length = std::distance(first, last);
+        auto range_length = distance(first, last);
         auto middle_index = range_length / 2;
         auto middle = *(first + middle_index);
 
         if(middle == N)
             return true;
         else if(middle > N)
-            std::advance(last, -middle_index);
+            advance(last, -middle_index);
         if(middle < N)
-            std::advance(first, middle_index);
+            advance(first, middle_index);
 
         if(range_length == 1)
             return false;
@@ -77,39 +56,39 @@ bool binary_search(int N, std::vector<int>& S)
 
 void search_test(int size, int N)
 {
-    std::vector<int> S;
-    std::random_device rd;
-    std::mt19937 rand(rd());
+    vector<int> S;
+    random_device rd;
+    mt19937 rand(rd());
 
-    std::uniform_int_distribution<std::mt19937::result_type> uniform_dist(1,size);
+    uniform_int_distribution<mt19937::result_type> uniform_dist(1,size);
 
     for(auto i =0; i<size;i++)
         S.push_back(uniform_dist(rand));
 
-    std::sort(S.begin(),S.end());
+    sort(S.begin(),S.end());
 
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    chrono::steady_clock::time_point begin = chrono::steady_clock::now();
     bool search_result=binary_search(N,S);
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    auto diff = std::chrono::duration_cast<std::chrono::microseconds>(end-begin);
-    std::cout<<"이진 검색 수행 시간:"<<diff.count()<<std::endl;
+    chrono::steady_clock::time_point end = chrono::steady_clock::now();
+    auto diff = chrono::duration_cast<chrono::microseconds>(end-begin);
+    cout<<"이진 검색 수행 시간:"<<diff.count()<<endl;
 
         if(search_result)
-            std::cout<<"이진 검색으로 원소를 찾았습니다."<<std::endl;
+            cout<<"이진 검색으로 원소를 찾았습니다."<<endl;
         else
-            std::cout<<"이진 검색으로 원소를 찾지 못했습니다."<<std::endl;
+            cout<<"이진 검색으로 원소를 찾지 못했습니다."<<endl;
 
-    std::chrono::steady_clock::time_point begin1 = std::chrono::steady_clock::now();
+    chrono::steady_clock::time_point begin1 = chrono::steady_clock::now();
     bool search_result1=linear_search(N,S);
-    std::chrono::steady_clock::time_point end1 = std::chrono::steady_clock::now();
-    auto diff1 = std::chrono::duration_cast<std::chrono::microseconds>(end1-begin1);
-    std::cout<<"선형 검색 수행 시간:"<<diff1.count()<<std::endl;
+    chrono::steady_clock::time_point end1 = chrono::steady_clock::now();
+    auto diff1 = chrono::duration_cast<chrono::microseconds>(end1-begin1);
+    cout<<"선형 검색 수행 시간:"<<diff1.count()<<endl;
 
         if(search_result1)
-            std::cout<<"선형 검색으로 원소를 찾았습니다."<<std::endl;
+            cout<<"선형 검색으로 원소를 찾았습니다."<<endl;
         else
-            std::cout<<"선형 검색으로 원소를 찾지 못했습니다."<<std::endl;
-    std::cout<<"-----------------------------------------"<<std::endl;
+            cout<<"선형 검색으로 원소를 찾지 못했습니다."<<endl;
+    cout<<"-----------------------------------------"<<endl;
 }
 
 int main()

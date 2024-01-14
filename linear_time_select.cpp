@@ -1,34 +1,35 @@
 #include <iostream>
 #include <vector>
+using namespace std;
 
 template<typename T>
-auto partition(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end)
+auto partition(typename vector<T>::iterator begin, typename vector<T>::iterator end)
 {
     auto pivot_val=*begin;
     auto left_iter=begin+1;
     auto right_iter=end;
     while (true)
     {
-        while (*left_iter<=pivot_val&&std::distance(left_iter, right_iter)>0)
+        while (*left_iter<=pivot_val&&distance(left_iter, right_iter)>0)
            left_iter++;
-        while (*right_iter>pivot_val&&std::distance(left_iter, right_iter)>0)
+        while (*right_iter>pivot_val&&distance(left_iter, right_iter)>0)
            right_iter--;
         if(right_iter==left_iter)
             break;
         else
-            std::iter_swap(left_iter, right_iter);
+            iter_swap(left_iter, right_iter);
         
     }
     if(pivot_val>*right_iter)
-        std::iter_swap(begin, right_iter);
+        iter_swap(begin, right_iter);
 
     return right_iter;
 }
 
 template<typename T>
-void quick_sort(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end)
+void quick_sort(typename vector<T>::iterator begin, typename vector<T>::iterator end)
 {
-    if(std::distance(begin, end)>=1)
+    if(distance(begin, end)>=1)
     {
         auto partition_iter = partition<T>(begin, end);
         quick_sort<T>(begin, partition_iter-1);
@@ -37,14 +38,14 @@ void quick_sort(typename std::vector<T>::iterator begin, typename std::vector<T>
 }
 
 template<typename T>
-auto find_median(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last)
+auto find_median(typename vector<T>::iterator begin, typename vector<T>::iterator last)
 {
     quick_sort<T>(begin, last);
-    return begin+(std::distance(begin, last)/2);
+    return begin+(distance(begin, last)/2);
 }
 
 template<typename T>
-auto partition_using_given_pivot(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end, typename std::vector<T>::iterator pivot)
+auto partition_using_given_pivot(typename vector<T>::iterator begin, typename vector<T>::iterator end, typename vector<T>::iterator pivot)
 {
     auto left_iter=begin;
     auto right_iter=end;
@@ -57,23 +58,23 @@ auto partition_using_given_pivot(typename std::vector<T>::iterator begin, typena
         if(left_iter==right_iter)
             break;
         else
-            std::iter_swap(left_iter, right_iter);
+            iter_swap(left_iter, right_iter);
     }
     if(*pivot>*right_iter)
-        std::iter_swap(pivot, right_iter);
+        iter_swap(pivot, right_iter);
     return right_iter;
 }
 
 template<typename T>
-typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::iterator begin, typename std::vector<T>::iterator last, size_t i)
+typename vector<T>::iterator linear_time_select(typename vector<T>::iterator begin, typename vector<T>::iterator last, size_t i)
 {
-   auto size = std::distance(begin, last);
+   auto size = distance(begin, last);
    if(size>0&&i<size)
    {
        auto num_Vi = (size+4)/5;
        size_t j =0;
 
-       std::vector<T> M;
+       vector<T> M;
        for(;j<size/5;j++)
        {
            auto b=begin+(j*5);
@@ -88,7 +89,7 @@ typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::it
        }
        auto median_of_medians = (M.size()==1)?M.begin():linear_time_select<T>(M.begin(), M.end()-1, M.size()/2);
        auto partition_iter = partition_using_given_pivot<T>(begin, last, median_of_medians);
-       auto k = std::distance(begin, partition_iter)+1;
+       auto k = distance(begin, partition_iter)+1;
        if(i==k)
            return partition_iter;
        else if(i<k)
@@ -103,9 +104,9 @@ typename std::vector<T>::iterator linear_time_select(typename std::vector<T>::it
 }
 
 template<typename T>
-std::vector<T> merge(std::vector<T>& arr1, std::vector<T>& arr2)
+vector<T> merge(vector<T>& arr1, vector<T>& arr2)
 {
-    std::vector<T> merged;
+    vector<T> merged;
     auto iter1 = arr1.begin();
     auto iter2 = arr2.begin();
     while(iter1!=arr1.end()&&iter2!=arr2.end())
@@ -135,13 +136,13 @@ std::vector<T> merge(std::vector<T>& arr1, std::vector<T>& arr2)
 }
 
 template<typename T>
-std::vector<T> merge_sort(std::vector<T> arr)
+vector<T> merge_sort(vector<T> arr)
 {
     if(arr.size()>1)
     {
         auto mid=size_t(arr.size()/2);
-        auto left_half = merge_sort(std::vector<T>(arr.begin(), arr.begin()+mid));
-        auto right_half = merge_sort(std::vector<T>(arr.begin()+mid, arr.end()));
+        auto left_half = merge_sort(vector<T>(arr.begin(), arr.begin()+mid));
+        auto right_half = merge_sort(vector<T>(arr.begin()+mid, arr.end()));
 
         return merge(left_half, right_half);
     }
@@ -149,23 +150,23 @@ std::vector<T> merge_sort(std::vector<T> arr)
 }
 
 template<typename T>
-void print_vector(std::vector<T> arr)
+void print_vector(vector<T> arr)
 {
 	for (auto i : arr)
-		std::cout << i << " ";
-	std::cout << std::endl;
+		cout << i << " ";
+	cout << endl;
 }
 
 void run_linear_select_test()
 {
-    std::vector<int> S1{45, 1, 3, 1,2,3,45,5,1,2,44,5,7};
-    std::cout<<"입력 벡터: "<<std::endl;
+    vector<int> S1{45, 1, 3, 1,2,3,45,5,1,2,44,5,7};
+    cout<<"입력 벡터: "<<endl;
     print_vector<int>(S1);
-    std::cout<<"정렬된 벡터: "<<std::endl;
+    cout<<"정렬된 벡터: "<<endl;
     print_vector<int>(merge_sort<int>(S1));
-    std::cout<<"3번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 3)<<std::endl;
-    std::cout<<"5번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 5)<<std::endl;
-    std::cout<<"11번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 11)<<std::endl;
+    cout<<"3번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 3)<<endl;
+    cout<<"5번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 5)<<endl;
+    cout<<"11번째 원소"<<*linear_time_select<int>(S1.begin(), S1.end()-1, 11)<<endl;
 }
 
 int main()
