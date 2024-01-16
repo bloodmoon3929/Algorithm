@@ -24,4 +24,6 @@ namespace prime_calculator
             return false;
         return true;
     }
+
+    template<T>
 }
