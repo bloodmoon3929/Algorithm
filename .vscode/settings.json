@@ -46,6 +46,7 @@
         "numeric": "cpp",
         "random": "cpp",
         "ratio": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "git.enableCommitSigning": false
     }
 }
