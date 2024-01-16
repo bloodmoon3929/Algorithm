@@ -2,7 +2,7 @@
 #include "mapreduce.hpp"
 using namespace std;
 
-name space prime_calculator
+namespace prime_calculator
 {
     bool cinst is_prime(long const number)
     {
