@@ -855,11 +855,3 @@ int main()
     return 0;
 }
 ```
-
-다음은 맵리듀스로 소수를 확인하는 코드입니다.
-```cpp
-
-```
-
-
-<span style="color:blue">
