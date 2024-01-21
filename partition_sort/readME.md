@@ -1,5 +1,3 @@
-https://github.com/bloodmoon3929/Algorithm/tree/main/partition_sort
-
 # 분할정복 심화<br>
 
 1. [이진 검색](#1-이진-검색)
@@ -239,22 +237,51 @@ mt19937 rand(rd())
 |sort|범위의 요소들을 정렬합니다.|
 |partial_sort|범위를 정렬하지만 정렬된 일부만 유지합니다.|
 |nth_element|특정 순서의 요소를 찾습니다.|
+|부가설명|퀵 정렬처럼 정렬후의 인덱스를 찾는 것이 아닌 정렬되지 않은 상태에서의 원소값을 반환합니다.|
 |이진 검색 알고리즘|(Binary Search Algorithms)|
 |binary_search|이진 검색을 수행하여 요소의 존재 여부를 확인합니다.|
 |lower_bound|이진 검색을 사용하여 특정 값 이상의 첫 번째 위치를 찾습니다.|
+|부가설명|{1, 2, 4, 4, 6, 7}배열에서 lower_bound(4)를 사용하면 4가 처음으로 나온 2번 인덱스의 주소를 반환합니다.|
 |upper_bound|이진 검색을 사용하여 특정 값보다 큰 첫 번째 위치를 찾습니다.|
+|부가설명|{1, 2, 4, 4, 6, 7}배열에서 upper_bound(4)를 사용하면, 4라는 원소값의 다음값인 6의 주소를 반환합니다.|
 |비교 알고리즘|(Comparison Algorithms)|
 |equal|두 범위가 동일한지 확인합니다.|
 |lexicographical_compare| 두 범위를 사전식으로 비교합니다.|
+|부가 설명 |사전식은 인덱스를 의미하며, 0번 인덱스부터 순차대로 비교하여 차이가 발생했을시 큰지 작은지 같은지에 따라 bool값을 반환합니다.|
 |순열과 조합 |(Permutations and Combinations)|
 |next_permutation|다음 순열을 생성합니다.|
 |prev_permutation|이전 순열을 생성합니다.|
+|부가설명|순열이란 {1,2,3},{1,3,2}등등 원소값은 같으니 그 순서가 다른 값들을 순열이라 하는데 여기서 순열의 순서는 첫 인덱스가 다음 인덱스가 작은 순으로 나열됩니다.|
 |rotate|요소들을 회전시킵니다.|
+|부가설명|전달인자로 설정할 범위의 시작위치와 끝 위치를 받고, 선택된 정렬이 배열의 어느 부분까지 움직일지에 대해서 3번째 전달인자를 받습니다.|
 |그 외의 알고리즘들||
 |max, min|두 값 중 큰 값 또는 작은 값을 반환합니다.|
 |max_element, min_element|범위에서 최댓값 또는 최솟값의 위치를 찾습니다.|
 |copy|요소를 다른 범위로 복사합니다.|
 |reverse|범위의 요소들을 뒤집습니다.|
+|partition_copy()   |분할 연산을 수행하고, 두 배열을 반환한다.|
+|부가설명|반환될 반환값이 두개이기에 pair을 통해 받거나 람다함수를 통하여 다음과 같이도 사용할 수 있습니다.|
+```cpp
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> source = {1, 2, 3, 4, 5, 6};
+    std::vector<int> true_values;
+    std::vector<int> false_values;
+
+    auto partition_result = std::partition_copy(
+        source.begin(), source.end(),
+        std::back_inserter(true_values),
+        std::back_inserter(false_values),
+        [](int x) { return x % 2 == 0; }
+    );
+    return 0;
+}
+```
+이 결과 반환된 값은 다음과 같을 것 입니다.<br>
+``true_values: {2, 4, 6}, false_values: {1, 3, 5}``
 
 ## 2. 분할 정복 이해
 분할 정복 접근방법은 크게 3단계로 나눌수 있습니다.<br>
@@ -426,6 +453,7 @@ int main()
 
 ### 2. 퀵 정렬
 퀵 정렬은 임의의 원소를 피벗으로 하여, 피벗과 비교하여 작은 값이 모인 집합과 큰 값이 모인 집합 두개로 나눕니다. 그 후 만들어진 두 집합 역시 동일한 과정을 거쳐 원소를 하나만 가질때까지 반복합니다.
+퀵 정렬은 최악의 경우 $O(N)$의 시간 복잡도를 가지게 되는 데, 그럼에도 병합정렬이 아닌 퀵 정렬을 사용하는 이유는 평균 시간 복잡도는 $O(nlogn)$으로 병합 정렬보다 빠르기 때문입니다. 또한 추가적인 메모리를 필요로하지 않고, 입력 배열 자체를 정렬하는 제자리 정렬 알고리즘입니다.
 <br><br>
 다음은 퀵 정렬의 코드입니다.
 
@@ -784,6 +812,11 @@ int main()
 |accumulate()       |원소의 누적 합을 계산한다.|
 |transform()        |컨테이너와 함수가 주어지면, 컨테이너의 모든 원소에 대해 해당 함수를 적용한다.|
 |reduce()(C++17문법)|지정된 범위의 원소에 대해 리듀스 연산을 수행하고 결과를 반환한다.|
+
+
+
+
+
 # 5.맵리듀스
 1. 맵 : 컨테이너를 입력으로 받아, 컨테이너의 모든 원소들에 함수($f(x)$)를 적용하는 연산입니다.
 
@@ -857,3 +890,4 @@ int main()
     return 0;
 }
 ```
+
