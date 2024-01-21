@@ -9,7 +9,11 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\build\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\build\\${fileBasenameNoExtension}.exe",
+                "-I","C:\\Users\\gnbup\\Desktop\\algorithm ad\\boost_1_71_0\\boost_1_71_0",
+                "-L","C:\\Users\\gnbup\\Desktop\\algorithm ad\\boost_1_71_0\\boost_1_71_0\\stage\\lib",
+                "-I", "C:\\Users\\gnbup\\Desktop\\algorithm ad\\boost_1_71_0\\boost_1_71_0",
+                "-L", "C:\\Users\\gnbup\\Desktop\\algorithm ad\\mapreduce-develop\\include"
             ],
             "options": {
                 "cwd": "C:/mingw64/bin"

@@ -249,8 +249,8 @@ mt19937 rand(rd())
 |prev_permutation|이전 순열을 생성합니다.|
 |rotate|요소들을 회전시킵니다.|
 |그 외의 알고리즘들||
-|max, std::min|두 값 중 큰 값 또는 작은 값을 반환합니다.|
-|max_element, std::min_element|범위에서 최댓값 또는 최솟값의 위치를 찾습니다.|
+|max, min|두 값 중 큰 값 또는 작은 값을 반환합니다.|
+|max_element, min_element|범위에서 최댓값 또는 최솟값의 위치를 찾습니다.|
 |copy|요소를 다른 범위로 복사합니다.|
 |reverse|범위의 요소들을 뒤집습니다.|
 
