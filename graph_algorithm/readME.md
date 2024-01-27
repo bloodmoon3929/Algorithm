@@ -12,6 +12,7 @@
 ### 다익스트라와의 차이점
 
 
+
 ### 벨만-포드 알고리즘의 구현
 
 ```cpp
@@ -23,7 +24,7 @@ using namespace std;
 
 struct Edge
 {
-    int  src;
+    int src;
     int dst;
     int weight;
 };
@@ -72,9 +73,22 @@ int main()
 }
 ```
 
-실행 결과
-![image](https://github.com/cdmh/mapreduce/assets/144004857/21bbda79-7435-43c1-b62f-9fc060a77aa3)
+`` 실행 결과``<br> 
+![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/659a1186-3495-464b-a44d-8175a9f0b375)
 
+``그래프``<br>
+![graph](https://github.com/bloodmoon3929/Algorithm/assets/144004857/0647a4d7-a616-410f-a3b4-2d5b9e28f1b3)
+
+``가중치``
+||||||가중치|
+|-|-|-|-|-|:-:|
+|0|-|-|-|-|0|
+|0|1|-|-|-|3|
+|0|1|3|2|-|6|
+|0|1|2|3|-|1|
+|0|1|3|2|4|8|
+
+결과 값과 출력값에 차이가 존재한다는 사실을 알 수 있다. 이는 음수 가중치로 인한 음수 사이클때문에 생긴 결과이며 이를 해결하기 위한 코드는 다음과 같다.
 
 ```cpp
 #include<iostream>
@@ -139,7 +153,7 @@ int main()
     }
 }
 ```
-실행 결과
+``실행 결과``<br>
 ![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/4cc9e26f-46f1-49c2-8b56-492f0b65caca)
 
 ## 2. 존슨 알고리즘
@@ -293,7 +307,8 @@ int main()
     Johnson(edges, V);
 }
 ```
-
+``실행 결과``<br>
+![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/453f63d3-57d3-44da-83be-d67dd3c585a9)
 ## 3. 코사라주 알고리즘
 
 
@@ -402,28 +417,5 @@ int main()
     }
 }
 ```
-
-
-
-
-
-
-![벨만포워드](https://github.com/bloodmoon3929/Algorithm/assets/144004857/dd26e25d-b39a-4575-833d-c7f5984fbb55)
-
-0번 정점을 기준으로 다익스트라 알고리즘의 최단 경로는 다음과 같습니다.
-
-|0|-|-|0|가중치|
-|-|-|-|-|:-:|
-|0|-|-|1|3|
-|0|-|1|2|8|
-|0|-|1|3|13|
-|0|1|2|4|10|
-
-0번 정점을 기준으로 벨만 포워드 알고리즘의 최단 경로는 다음과 같습니다.
-
-|0|-|-|-|0|가중치|
-|-|-|-|-|-|:-:|
-|0|-|-|-|1|3|
-|0|-|1|3|2|6|
-|0|-|1|2|3|1|
-|0|1|3|2|4|8|
+``실행 결과``<br>
+![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/3e36f4a8-5535-4f54-a4e9-2a0b7b929b41)
