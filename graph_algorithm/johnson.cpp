@@ -105,7 +105,7 @@ void Johnson(vector<Edge> edges, int V)
         return;
     for(auto& e : edges)
     {
-        e.weight+=(h[e.src]-h[e.dst]);
+        e.weight-=(h[e.src]-h[e.dst]);
     }
     vector<vector<int>> shortest(V);
     for(int i=0; i<V; i++)
