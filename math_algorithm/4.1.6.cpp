@@ -16,13 +16,7 @@ int main()
             cin>>arr[j][i];
         }
     }
-    for(int i=0; i<4; i++)
-    {
-        for(int j=0; j<2; j++)
-        {
-            vecter[j][i]=arr[j][i]-arr[j][i+1];
-        }
-    }
+ 
     vecter[0][0]=arr[0][0]-arr[0][1];
     vecter[1][0]=arr[1][0]-arr[1][1];
 
@@ -41,12 +35,12 @@ int main()
         pattern=3;
 
     if(pattern==1)
-        cout<<std::setprecision(13)<<sqrt(pow(vecter[0][0],2)+pow(vecter[1][0],2));
+        cout<<setprecision(13)<<sqrt(pow(vecter[0][0],2)+pow(vecter[1][0],2));
     else if(pattern==2)
     {
-       cout<<std::setprecision(13)<<abs(vecter[0][0]*vecter[1][1]-vecter[1][0]*vecter[0][1])/sqrt(pow(vecter[0][1],2)+pow(vecter[1][1],2));
+       cout<<setprecision(13)<<abs(vecter[0][0]*vecter[1][1]-vecter[1][0]*vecter[0][1])/sqrt(pow(vecter[0][1],2)+pow(vecter[1][1],2));
     }
     else if(pattern==3)
-        cout<<std::setprecision(13)<<sqrt(pow(vecter[0][2],2)+pow(vecter[1][2],2));
+        cout<<setprecision(13)<<sqrt(pow(vecter[0][2],2)+pow(vecter[1][2],2));
     return 0;
 }

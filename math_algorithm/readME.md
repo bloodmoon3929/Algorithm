@@ -64,8 +64,83 @@ $|\overrightarrow{a} \times \overrightarrow{b}|=|a_xb_y-a_yb_x|$<br>
 
 이를 구현한 코드는 다음과 같습니다.
 ```cpp
+#include<iostream>
+#include<cmath>
+#include<iomanip>
 
+using namespace std;
+
+int main()
+{
+    int arr[2][3];
+    int pattern=2;
+    int vecter[2][4];
+    for(int i=0; i<3; i++)
+    {
+        for(int j=0; j<2; j++)
+        {
+            cin>>arr[j][i];
+        }
+    }
+   
+    vecter[0][0]=arr[0][0]-arr[0][1];
+    vecter[1][0]=arr[1][0]-arr[1][1];
+
+    vecter[0][1]=arr[0][2]-arr[0][1];
+    vecter[1][1]=arr[1][2]-arr[1][1];
+
+    vecter[0][2]=arr[0][0]-arr[0][2];
+    vecter[1][2]=arr[1][0]-arr[1][2];
+    
+    vecter[0][3]=arr[0][1]-arr[0][2];
+    vecter[1][3]=arr[1][1]-arr[1][2];
+
+    if(vecter[0][0]*vecter[0][1]+vecter[1][0]*vecter[1][1]<0)
+        pattern=1;
+    else if(vecter[0][2]*vecter[0][3]+vecter[1][2]*vecter[1][3]<0)
+        pattern=3;
+
+    if(pattern==1)
+        cout<<setprecision(13)<<sqrt(pow(vecter[0][0],2)+pow(vecter[1][0],2));
+    else if(pattern==2)
+    {
+       cout<<setprecision(13)<<abs(vecter[0][0]*vecter[1][1]-vecter[1][0]*vecter[0][1])/sqrt(pow(vecter[0][1],2)+pow(vecter[1][1],2));
+    }
+    else if(pattern==3)
+        cout<<setprecision(13)<<sqrt(pow(vecter[0][2],2)+pow(vecter[1][2],2));
+    return 0;
+}
 ```
+arr 배열에 입력된 값은 책 기준 다음과 같습니다.
+
+| |0(x)|1(y)|
+|-|-|-|
+|a|0|5|
+|b|1|1|
+|c|3|0|
+
+<br><br>
+vecter 배열에 입력된 값은 책 기준 다음과 같습니다.
+
+| |0(x)|1(y)|
+|-|-|-|
+|BA|-1|4|
+|BC|2|-1|
+|CA|-3|5|
+|CB|-2|1|
+
+<br><br>
+pattern은 다음과 같음을 나타냅니다
+
+1. ABC의 각이 90가 초과했을시($\overrightarrow{BA}\cdot\overrightarrow{BC}<0$)
+2. 패턴 1, 3 둘다 아닐시
+3. ACB의 각이 90가 초과했을시($\overrightarrow{CA}\cdot\overrightarrow{CB}<0$)
+<br><br>
+
+### #include<iomanip>
+입출력 조작과 관련된 도구를 제공하는 헤더파일<br>
+setprecision()을 사용하기 위해 사용하였고, 해당 메서드는 출력할 소수점의 몇번째 자리까지 출력할지 결정하는 메서드
+
 
 이 외의 계산기하학문제는
 1. 가장 가까운 점 찾기
@@ -96,10 +171,84 @@ ex)
 2번 줄에 기록된 배열의 누접합을 구하고, n부터 m까지 구한다고 가정했을시<br>
 누접합 배열의 $m의 값-(n-1)의 값$을 구한다면 O(NQ)가 아닌 O(N+Q)의 시간복잡도로 이 문제를 풀 수 있습니다.
 
+```cpp
+#include<iostream>
+#include<vector>
+
+using namespace std;
+int main()
+{
+    int N,Q,X,Y;
+    cin>>N>>Q;
+    vector<int> sum;
+    cin>>X;
+    sum.push_back(X);
+    for(int i=1; i<N; i++)
+    {
+        cin>>X;
+        sum.push_back(X+sum[i-1]);
+    }
+    vector<pair<int,int>> input;
+    for(int i=0; i<Q; i++)
+    {
+        cin>>X>>Y;
+        input.push_back(make_pair(X-1,Y-1));
+    }
+    for(int i=0; i<Q; i++)
+    {
+        if(input[i].first==0)
+        {
+            cout<<sum[input[i].second]<<endl;
+        }
+        else
+        {
+            cout<<sum[input[i].second]-sum[input[i].first-1]<<endl;
+        }
+    }
+    return 0;
+}
+```
+
 ### 예제2 : 눈 시뮬레이션
 이 문제는 계차를 이용하여 푸는 문제입니다.<br>
 n일 부터 m일까지 k만큼의 눈이 내렸다면 계차 배열에는 n번 항에 k를 더하고 m-1항에 k를 빼주면 됩니다. 이렇게 모두 기록하고 난 후 1번부터 m번까지가(0번 제외) 구하고자한 값이고 비교 연산자를 사용해 출력만 해주면 됩니다.<br>
 이 역시 시간 복잡도는 O(N+Q)입니다. 
+
+```cpp
+#include<iostream>
+#include<vector>
+
+using namespace std;
+int main()
+{
+    int N,Q,X,Y,Z;
+    cin>>N>>Q;
+    vector<int> sum(N+2);
+    for(int i=0; i<Q; i++)
+    {
+        cin>>X>>Y>>Z;
+        sum[X]+=Z;
+        sum[Y+1]-=Z;
+    }
+    for(int i=2; i<N+1; i++)
+    {
+        if(sum[i]>0)
+        {
+            cout<<"<";
+        }
+        else if(sum[i]==0)
+        {
+            cout<<"=";
+        }
+        else if(sum[i]<0)
+        {
+            cout<<">";
+        }
+    }
+    return 0;
+}
+```
+
 
 ## 미분
 ### 미분이란?
