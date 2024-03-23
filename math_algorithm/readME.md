@@ -62,7 +62,7 @@ $|\overrightarrow{a} \times \overrightarrow{b}|=|a_xb_y-a_yb_x|$<br>
 1. 벡터 $\overrightarrow{BA}$와 $\overrightarrow{BC}$의 외적을 구합니다.(평행 사변형의 면적을 구하기 위해)
 2. 평행사변형 면적을 구하는 공식은 $밑변\times높이$임으로 구한 외적에 밑변인 $\overline{BC}$를 나누어 높이를 구합니다.
 
-이를 구현한 코드는 다은과 같습니다.
+이를 구현한 코드는 다음과 같습니다.
 ```cpp
 
 ```
