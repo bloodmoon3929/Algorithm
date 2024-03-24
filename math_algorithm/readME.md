@@ -738,5 +738,122 @@ $
 
 ### 구현
 ```cpp
+#include <iostream>
+#include <vector>
+#include <stack>
+#include<queue>
+#include<cmath>
+
+using namespace std;
+
+struct Matrix 
+{
+    vector<vector<int>> data;
+};
+
+Matrix multiply(const Matrix& A, const Matrix& B) 
+{
+    Matrix result;
+    result.data.resize(2, vector<int>(2, 0));
+
+    for (int i = 0; i < 2; ++i) 
+    {
+        for (int j = 0; j < 2; ++j) 
+        {
+            for (int k = 0; k < 2; ++k) 
+            {
+                result.data[i][j] += A.data[i][k] * B.data[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+Matrix matrixPower(const Matrix& mat, int power) 
+{
+    if (power == 0) 
+    {
+        Matrix result;
+        result.data.resize(2, vector<int>(2, 0));
+        for (int i = 0; i < 2; ++i) 
+        {
+            result.data[i][i] = 1;
+        }
+        return result;
+    } 
+    else if (power == 1) 
+    {
+        return mat;
+    } 
+    else 
+    {
+        Matrix result = matrixPower(mat, power / 2);
+        result = multiply(result, result);
+        if (power % 2 == 1) 
+        {
+            result = multiply(result, mat);
+        }
+        return result;
+    }
+}
+int main() 
+{
+    int N;
+    cin >> N;
+
+    Matrix begin;
+    begin.data = {{1, 1}, {1, 0}};
+
+    vector<int> powers;
+    int temp = N-2;
+    while (temp > 0)
+    {
+        int power = 1;
+        while (power * 2 <= temp) 
+        {
+            power *= 2;
+        }
+        powers.push_back(power);
+        temp -= power;
+    }
+
+    Matrix result = begin;
+    for (int power : powers) 
+    {
+        result = multiply(result, matrixPower(begin, power));
+    }
+
+    cout << result.data[1][0] + result.data[1][1];
+
+    return 0;
+}
 
 ```
+
+1. struct Matrix - 이차원 배열을 저장할 구조체
+2. Matrix multiply(const Matrix& A, const Matrix& B) - 입력받은 행렬 두개를 곱하여 주는 함수
+3. Matrix matrixPower(const Matrix& mat, int power) - 거듭제곱을 구해주는 함수, 제귀 함수를 통하여 계산을 빠르게 함
+4. 입력한 숫자를 2진수의 단위로 쪼개는 작업
+```cpp
+int temp = N-2;
+    while (temp > 0)
+    {
+        int power = 1;
+        while (power * 2 <= temp) {
+            power *= 2;
+        }
+        powers.push_back(power);
+        temp -= power;
+    }
+```
+5. 저장해둔 2진수 단위의 자료들을 서로 곱하여 주는 작업
+```cpp
+Matrix result = begin;
+    for (int power : powers) {
+        result = multiply(result, matrixPower(begin, power));
+    }
+```
+
+6. cout << result.data[1][0] + result.data[1][1]; - 결과 출력
+7. int temp = N-2; - -2인 이유는 begin함수에 하나가 이미 존재하고, 13을 구한다 하면 $A^{12}$를 구해야 하기 때문
