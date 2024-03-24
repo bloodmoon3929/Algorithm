@@ -364,10 +364,277 @@ N이 100이라고 가정했을시, 100의 루트인 10의 배수에 100이 있�
 $\frac{1}{x}$의 적분 : $\int\limits_a^b\frac{1}{x}dx=(\log_eb-\log_ea)$ (에라토스네스의 체의 시간복잡도를 구하는 데 사용됨)
 
 역수의 합이 $\log$임을 증명하기 : 
+1. 우선 정수들을 x축, 그 정수의 역수를 y축으로 두었다고 가정하고 막대그래프를 그립니다.
+2. 그래프 기준 그래프의 크기를 넘지 않는 $y=\frac{1}{x+1}$를 A라고 가정했을 시 면적은 $\log_e(N+1)$
+3. 그래프 기준 그래프의 크기를 넘는 $y=\frac{1}{x}$를 C라고 가정했을시 면적은 $\log_e(N)+1$
+4. 역수의 합(조화급수)는 두 면적 A,C사이의 값이며, log값에 근사함
 <br>
 
-
 ## 그래프 알고리즘
+### 그래프란?
+알고리즘에서 그래프는 네트워크 구조를 의미함, 정점(vertex)와 변(edge)로 이루워짐
+
+### 그래프의 종류
+1. 무방향 그래프, 방향 그래프
+2. 가중치 그래프, 무가중 그래프
+3. 이분 그래프 : 연결된 정점끼리 같은 색이 아닌 그래프
+4. 평면 그래프 : edge가 서로 교차하지 않는 그래프
+5. 오일러 그래프 : 한 정점에서 시작하여 모든 edge를 지나 다시 출발했던 정점으로 돌아올수 있는 그래프
+6. 트리 구조
+7. 완전 그래프 : 무방향 그래프에서 모든 정점 사이에 간선이 연결된 것
+8. 정규 그래프 : 무방향 그래프에서 모든 정점의 차수(간선의 수)가 같은것
+9. 완전 이분 그래프 : 모든 정점 사이에 간선이 하나뿐인 이분 그래프
+10. 방향 비순환 그래프 : 방향 그래프중 같은 정점을 거치지 않고 원래 정점으로 돌아올 수 있는 경로가 없는 그래프
+
+### 그래프의 구현 
+
+인접 리스트 문제
+```cpp
+#include<iostream>
+#include<vector>
+#include<climits>
+
+using namespace std;
+
+struct Edge
+{
+    int src;
+    int dst;
+    int weight;
+};
+const int UNKNOWN=INT_MAX;
+int main()
+{
+    int N,M,X,Y;
+    vector<vector<Edge>> G(N + 1);
+    cin>>N>>M;
+    for(int i=0; i<M; i++)
+    {
+        cin>>X>>Y;
+        G[X].push_back({X,Y,0});
+        G[Y].push_back({Y,X,0});
+    }
+
+    for (int i = 1; i <= N; i++) 
+    {
+        cout << i << ": "<<endl;
+        for (auto& node : G[i]) 
+        {
+            cout <<"{" <<node.src<<":" <<node.dst<< "}"<<endl;
+        }
+        cout << endl;
+    }
+    return 0;
+}
+```
+const int UNKNOWN=INT_MAX;는 추후 사용할때 쓰려고 미리 만듬<br>
+```cpp
+struct Edge
+{
+    int src;
+    int dst;
+    int weight;
+};
+```
+src는 시작점, dst는 도착점, weight는 가중치이나 무가중 그래프이기에 0의 가중치를 주었음
+
+### 깊이 우선 탐색
+Depth First Search(DFS)라고 부르는 깊이 우선 탐색은 다음과 같은 절차를 수행합니다.
+1. 모든 정점을 false로 설정
+2. 선택한 정점에 방문하고, 정점의 값을 true로 수정
+3. 두 가지 절차중 하나 실행(처음 실행한 정점에거 a절차 실행시 반복 종료)
+   a. 인접 정점이 모두 true라면 이전 정점으로 복귀
+   b. 그렇지 않다면, 현재 정점을 true로 수정후 인접 정점에서 가장 작은 정점 방문
+4. 모든 정점이 true 값을 가진다면 그래프가 연결된 것임
+   
+
+### 너비 우선 탐색
+Breadth First Search(BFS)라고 부르는 너비 우선 탐색은 다음과 같은 절차를 수행합니다.
+1. 모든 정점을 false로 설정
+2. queue에 선택한 정점 추가후 정점을 true로 설정, dist[선택한 정점]=0으로 설정(정점까지의 거리)
+3. queue가 빌때까지 다음의 절차를 반복
+   queue에서 요소를 확인(비어있다면 종료)
+   queue의 가장 앞의 요소를 추출
+   추출한 요소를 기준으로 인접정점에 dist를 해당 정점의 (dist값 +1)로 설정하고 queue에 넣음
+
+queue - 선입 선출의 자료구조
+
+깊이 우선 탐색과 너비 우선 탐색의 구현
+```cpp
+#include<iostream>
+#include<vector>
+#include<string>
+#include<set>
+#include<map>
+#include<queue>
+#include<stack>
+
+using namespace std;
+
+template<typename T>
+struct Edge
+{
+    unsigned int src;
+    unsigned int dst;
+    T weight;
+};
+
+template<typename T>
+class Graph
+{
+public:
+    Graph(unsigned int N) : V(N){}
+    auto vertices() const {return V;}
+    auto &edges() const {return edge_list;}
+    auto edges(unsigned int v) const
+    {
+        vector<Edge<T>> edges_from_v;
+        for(auto &e: edge_list)
+        {
+            if(e.src==v)
+                edges_from_v.emplace_back(e);
+        }
+        return edges_from_v;
+    }
+    void add_edge(Edge<T>&& e)
+    {
+        if(e.src>=1&&e.src<=V&&e.dst>=1&&e.dst<=V)
+            edge_list.emplace_back(e);
+        else
+            cerr<<"에러: 유효 범위를 벗어난 정점!"<<endl;
+    }
+    template<typename U>
+    friend ostream& operator<<(ostream& os, const Graph<U>& G);
+private:
+    unsigned int V;
+    vector<Edge<T>> edge_list;
+};
+
+template<typename U>
+ostream& operator<< (ostream& os, const Graph<U>& G)
+{
+    for(unsigned int i=1; i<G.vertices(); i++)
+    {
+        os<<i<<":\t";
+        auto edges = G.edges(i);
+        for(auto& e : edges)
+            os<<"{"<<e.dst<<": "<<e.weight<<"}, ";
+        os<<endl;
+    }
+    return os;
+}
+
+template<typename T>
+auto create_reference_graph()
+{
+    Graph<T> G(9);
+
+    map<unsigned int, vector<pair<unsigned, T>>> edge_map;
+    edge_map[1]={{2,0},{5,0}};
+    edge_map[2]={{1,0},{5,0},{4,0}};
+    edge_map[3]={{4,0},{7,0}};
+    edge_map[4]={{2,0},{3,0},{5,0},{6,0},{8,0}};
+    edge_map[5]={{1,0},{2,0},{4,0},{8,0}};
+    edge_map[6]={{4,0},{7,0},{8,0}};
+    edge_map[7]={{3,0},{6,0}};
+    edge_map[8]={{4,0},{5,0},{6,0}};
+
+    for(auto& i: edge_map)
+        for(auto& j : i.second)
+            G.add_edge(Edge<T>{i.first, j.first, j.second});
+    return G;
+}
+
+template<typename T>
+auto DFS(const Graph<T>& G, unsigned int start)
+{
+    stack<unsigned int> stack;
+    set<unsigned int> visited;
+    vector<unsigned int> visit_order;
+    stack.push(start);
+
+    while (!stack.empty())
+    {
+        auto current_vertex = stack.top();
+        stack.pop();
+
+        if(visited.find(current_vertex)==visited.end())
+        {
+            visited.insert(current_vertex);
+            visit_order.push_back(current_vertex);
+
+            for(auto& e : G.edges(current_vertex))
+            {
+                if(visited.find(e.dst)==visited.end())
+                {
+                    stack.push(e.dst);
+                }
+            }
+        }
+
+    }
+    return visit_order;
+}
+
+
+template<typename T>
+auto BFS(const Graph<T>& G, unsigned int start)
+{
+    queue<unsigned int> queue;
+    set<unsigned int> visited;
+    vector<unsigned int> visit_order;
+    queue.push(start);
+
+    while (!queue.empty())
+    {
+        auto current_vertex = queue.front();
+        queue.pop();
+
+        if(visited.find(current_vertex)==visited.end())
+        {
+            visited.insert(current_vertex);
+            visit_order.push_back(current_vertex);
+
+            for(auto& e : G.edges(current_vertex))
+            {
+                if(visited.find(e.dst)==visited.end())
+                {
+                    queue.push(e.dst);
+                }
+            }
+        }
+
+    }
+    return visit_order;
+}
+
+int main()
+{
+    using T=unsigned int;
+
+    auto G= create_reference_graph<T>();
+    cout<<"[입력 그래프]"<<endl;
+    cout<<G<<endl;
+
+    cout<<"[DFS 방문 순서]"<<endl;
+    auto dfs_visit_order = DFS(G,1);
+    for(auto v : dfs_visit_order)
+        cout<<v<<endl;
+
+    cout<<"[BFS 방문 순서]"<<endl;
+    auto bfs_visit_order = BFS(G,1);
+    for(auto v : bfs_visit_order)
+        cout<<v<<endl;
+    return 0;
+}
+```
+
+이 외의 그래프 문제는 
+1. 단일 시작점 최단거리 문제
+2. 모든 정점까지의 최단거리 문제
+3. 최소 전역 트리 문제
+4. 최대 플로 문제
+5. 이분 매칭 문제
 
 ## 나머지 계산
 
