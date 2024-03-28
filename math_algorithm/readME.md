@@ -637,6 +637,100 @@ int main()
 5. 이분 매칭 문제
 
 ## 나머지 계산
+### 모듈러 역수란?
+$A (mod M)$을 A를 M으로 나눈 나머지라고 할 때, A을 $B (mod M)$한 결과 값을 C, B을 $B (mod M)$한 결과 값을 D라고 했을시, 다음을 만족합니다.<br><br>
+
+$A+B\equiv C+D(mod M)$<br>
+$A-B\equiv C-D(mod M)$<br>
+$A\times B\equiv C\times D(mod M)$<br>
+
+$\equiv$ 란?<br>
+예를 들어, $A\equiv B(mod M)$이라고 할 때, A를 M으로 나눈 나머지와 B를 M으로 나눈 나머지가 같음을 의미합니다.<br>
+$A=M\times Q_a+r$<br>
+$B=M\times Q_b+r$<br>
+여기서 $Q_{a,b}$는 미지수 이고, r이 나머지입니다.
+
+이러한 이유로 식을 모두 계산 후 나머지를 구하는 것이 아닌, 계산 이전부터 나머지를 구하고 계산후 나머지를 구하게 된다면 컴퓨터가 계산하지 못하는 단위의 계산도 가능하게 됩니다.
+
+하지만 나누기에 대해서는 이가 성립하지 않습니다.
+
+그러하기에 나눗셈은 다음의 예시와 같은 절차로 풀게됩니다.
+<br>ex)$8\div 2=4(mod M)$  ->    $2\times 4=8(modM)$<br>
+다음의 과정을 거친다면, 나눗셈이 아닌 곱셈을 계산하는 것이 되기에 모듈러 역수를 구할수 있게 됩니다. 이를 식으로 나타낸다면,<br>
+$A\div B=C(mod M)$<br>
+$A\times B^{-1}=C(mod M)$<br>
+$A\times B\times B^{-2}=C(mod M)$<br>
+$A\times B=C\times B^{2}(mod M)$<br>
+
+### 예제1 : 피보나치 수열의 나머지
+```cpp
+#include<iostream>
+#define MOD 1000000007
+
+using namespace std;
+
+int main()
+{
+    int N,pre=1,cur=1,temp;
+    cin>>N;
+    for(int i=2; i<N; i++)
+    {
+        temp=(pre+cur)%MOD;
+        pre=cur;
+        cur=temp;
+    }
+    if(N<=2)
+        cout<<"1";    
+    else
+        cout<<temp%MOD;
+    return 0;
+}
+```
+책에서 요구한 8691200번째의 피보나치 수열은 자리수만 209자리임으로 int 자료형으로는 절대 풀 수 없으나, 모듈러 역수를 알고있다면 구할 수 있습니다.<br>
+
+### 예제2 : a의 b 제곱과 나머지
+```cpp
+#include<iostream>
+#include<queue>
+
+#define MOD 1000000007
+
+using namespace std;
+
+int main()
+{
+    long long int N,M,temp=1;
+    cin>>N>>M;
+    queue<int> binary;
+    while(M>0)
+    {
+        binary.push(M%2);
+        M/=2;
+    }
+    while(!binary.empty())
+    {
+        int bit =binary.front();
+        binary.pop();
+        if(bit==1)
+        {
+            temp*=(N%MOD);
+        }
+        N*=N;
+    }
+    cout<<temp%MOD;
+    return 0;
+}
+```
+승수의 경우 $A^{13}$을 구하는 방식을 $A^8 \times A^4 \times A^1$로 푸는 것이 메모리도 덜 차지하기에 승수를 2진수화 한 뒤 그 값에 따라 곱하여 주었습니다. 
+
+### 예제3 : 경로의 경우의 수에 나머지 적용하기 
+
+
+### RSA 암호
+1. 송신자가 수신자의 공개키를 얻는다.
+2. 보내고자 하는 메일을 숫자로 변환한후, e의 제곱을 한 후 n으로 나눈 나머지를 수신자에게 보냅니다.
+3. $x^d$을 n으로 나눈 나머지를 구하면 $x^d=m^{ed} \equiv m(modn)$이기에 원래 문장으로 복원 가능합니다.
+
 
 ## 행렬의 거듭제곱
 ### 행렬이란?
@@ -740,29 +834,27 @@ $
 ```cpp
 #include <iostream>
 #include <vector>
-#include <stack>
 #include<queue>
-#include<cmath>
+
+#define MOD 1000000007
 
 using namespace std;
 
 struct Matrix 
 {
-    vector<vector<int>> data;
+    vector<vector<long long int>> data;
 };
 
 Matrix multiply(const Matrix& A, const Matrix& B) 
 {
     Matrix result;
-    result.data.resize(2, vector<int>(2, 0));
+    result.data.resize((long long int)2, vector<long long int>(2, 0));
 
-    for (int i = 0; i < 2; ++i) 
-    {
-        for (int j = 0; j < 2; ++j) 
-        {
+    for (int i = 0; i < 2; ++i) {
+        for (int j = 0; j < 2; ++j) {
             for (int k = 0; k < 2; ++k) 
             {
-                result.data[i][j] += A.data[i][k] * B.data[k][j];
+                result.data[i][j] += (A.data[i][k] * B.data[k][j])%MOD;
             }
         }
     }
@@ -770,33 +862,6 @@ Matrix multiply(const Matrix& A, const Matrix& B)
     return result;
 }
 
-Matrix matrixPower(const Matrix& mat, int power) 
-{
-    if (power == 0) 
-    {
-        Matrix result;
-        result.data.resize(2, vector<int>(2, 0));
-        for (int i = 0; i < 2; ++i) 
-        {
-            result.data[i][i] = 1;
-        }
-        return result;
-    } 
-    else if (power == 1) 
-    {
-        return mat;
-    } 
-    else 
-    {
-        Matrix result = matrixPower(mat, power / 2);
-        result = multiply(result, result);
-        if (power % 2 == 1) 
-        {
-            result = multiply(result, mat);
-        }
-        return result;
-    }
-}
 int main() 
 {
     int N;
@@ -805,26 +870,29 @@ int main()
     Matrix begin;
     begin.data = {{1, 1}, {1, 0}};
 
-    vector<int> powers;
-    int temp = N-2;
-    while (temp > 0)
+    queue<int> binary;
+    N--;
+    while(N>0)
     {
-        int power = 1;
-        while (power * 2 <= temp) 
-        {
-            power *= 2;
-        }
-        powers.push_back(power);
-        temp -= power;
+        binary.push(N%2);
+        N/=2;
     }
-
     Matrix result = begin;
-    for (int power : powers) 
+    Matrix temp;
+    temp.data={{1,0},{0,1}};
+    while(!binary.empty())
     {
-        result = multiply(result, matrixPower(begin, power));
+        int bit =binary.front();
+        binary.pop();
+        if(bit==1)
+        {
+            temp = multiply(temp,result);
+        }
+        result = multiply(result,result);
+
     }
 
-    cout << result.data[1][0] + result.data[1][1];
+    cout << (temp.data[1][0] + temp.data[1][1])%MOD;
 
     return 0;
 }
@@ -833,27 +901,32 @@ int main()
 
 1. struct Matrix - 이차원 배열을 저장할 구조체
 2. Matrix multiply(const Matrix& A, const Matrix& B) - 입력받은 행렬 두개를 곱하여 주는 함수
-3. Matrix matrixPower(const Matrix& mat, int power) - 거듭제곱을 구해주는 함수, 제귀 함수를 통하여 계산을 빠르게 함
-4. 입력한 숫자를 2진수의 단위로 쪼개는 작업
+3. 입력한 숫자를 2진수의 단위로 쪼개는 작업
 ```cpp
-int temp = N-2;
-    while (temp > 0)
+while(N>0)
     {
-        int power = 1;
-        while (power * 2 <= temp) {
-            power *= 2;
-        }
-        powers.push_back(power);
-        temp -= power;
+        binary.push(N%2);
+        N/=2;
     }
 ```
-5. 저장해둔 2진수 단위의 자료들을 서로 곱하여 주는 작업
+4. $2\times 2$ 행렬에서 곱했을시 그대로인 행렬
 ```cpp
-Matrix result = begin;
-    for (int power : powers) {
-        result = multiply(result, matrixPower(begin, power));
+temp.data={{1,0},{0,1}};
+```
+5. 
+```cpp
+while(!binary.empty())
+    {
+        int bit =binary.front();
+        binary.pop();
+        if(bit==1)
+        {
+            temp = multiply(temp,result);
+        }
+        result = multiply(result,result);
+
     }
 ```
 
 6. cout << result.data[1][0] + result.data[1][1]; - 결과 출력
-7. int temp = N-2; - -2인 이유는 begin함수에 하나가 이미 존재하고, 13을 구한다 하면 $A^{12}$를 구해야 하기 때문
+7. N--; - --인 이유는 begin함수에 하나가 이미 존재하기 때문

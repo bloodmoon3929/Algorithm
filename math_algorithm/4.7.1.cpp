@@ -1,26 +1,26 @@
 #include <iostream>
 #include <vector>
-#include <stack>
 #include<queue>
-#include<cmath>
+
+#define MOD 1000000007
 
 using namespace std;
 
 struct Matrix 
 {
-    vector<vector<int>> data;
+    vector<vector<long long int>> data;
 };
 
 Matrix multiply(const Matrix& A, const Matrix& B) 
 {
     Matrix result;
-    result.data.resize(2, vector<int>(2, 0));
+    result.data.resize((long long int)2, vector<long long int>(2, 0));
 
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < 2; ++j) {
             for (int k = 0; k < 2; ++k) 
             {
-                result.data[i][j] += A.data[i][k] * B.data[k][j];
+                result.data[i][j] += (A.data[i][k] * B.data[k][j])%MOD;
             }
         }
     }
@@ -28,33 +28,6 @@ Matrix multiply(const Matrix& A, const Matrix& B)
     return result;
 }
 
-Matrix matrixPower(const Matrix& mat, int power)
-{
-    if (power == 0) 
-    {
-        Matrix result;
-        result.data.resize(2, vector<int>(2, 0));
-        for (int i = 0; i < 2; ++i) 
-        {
-            result.data[i][i] = 1;
-        }
-        return result;
-    } 
-    else if (power == 1) 
-    {
-        return mat;
-    } 
-    else 
-    {
-        Matrix result = matrixPower(mat, power / 2);
-        result = multiply(result, result);
-        if (power % 2 == 1) 
-        {
-            result = multiply(result, mat);
-        }
-        return result;
-    }
-}
 int main() 
 {
     int N;
@@ -63,26 +36,29 @@ int main()
     Matrix begin;
     begin.data = {{1, 1}, {1, 0}};
 
-    vector<int> powers;
-    int temp = N-2;
-    while (temp > 0) 
+    queue<int> binary;
+    N--;
+    while(N>0)
     {
-        int power = 1;
-        while (power * 2 <= temp) 
-        {
-            power *= 2;
-        }
-        powers.push_back(power);
-        temp -= power;
+        binary.push(N%2);
+        N/=2;
     }
-
     Matrix result = begin;
-    for (int power : powers) 
+    Matrix temp;
+    temp.data={{1,0},{0,1}};
+    while(!binary.empty())
     {
-        result = multiply(result, matrixPower(begin, power));
+        int bit =binary.front();
+        binary.pop();
+        if(bit==1)
+        {
+            temp = multiply(temp,result);
+        }
+        result = multiply(result,result);
+
     }
 
-    cout << result.data[1][0] + result.data[1][1];
+    cout << (temp.data[1][0] + temp.data[1][1])%MOD;
 
     return 0;
 }
