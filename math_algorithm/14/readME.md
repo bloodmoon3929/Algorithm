@@ -17,4 +17,5 @@ $4!$의 경우의 수는 24가지이고, $3^3$의 경우의 수는 27가지이�
 
 코드 없이도 질문의 답을 제공하였지만, 이를 구현한 것은 다음과 같습니다.
 
-![image](https://github.com/bloodmoon3929/bloodmoon3929/assets/144004857/52112e7c-d821-4de1-8f0f-b71922deb860)
+![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/1c65b32f-df86-40b0-af44-3424f4dbfcb6)
+![image](https://github.com/bloodmoon3929/Algorithm/assets/144004857/1a3019ba-f276-4d7c-bbd4-9055a4b16a27)
