@@ -418,3 +418,11 @@ https://github.com/pdjdev/uTable
 우리랑 다른 방식의 공통 공강 찾기(응용해서 시간표 등록 가능할 듯?)
 
 https://github.com/ecsimsw/gap-between-classes
+
+https://github.com/juijeong8324/MyEveryMap
+
+https://github.com/shin0park/ajou-timetable-back-end
+
+https://github.com/hyeonseongkang/Schedule-Android
+
+https://blog.naver.com/PostView.nhn?blogId=kkj6369&logNo=221437993432
